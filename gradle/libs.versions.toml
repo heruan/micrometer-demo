@@ -14,4 +14,5 @@ vaadin-dev = { module = "com.vaadin:vaadin-dev", version.ref = "vaadin" }
 spring-boot-bom = { module = "org.springframework.boot:spring-boot-dependencies", version.ref = "spring" }
 spring-boot-starter-actuator = { module = "org.springframework.boot:spring-boot-starter-actuator" }
 spring-boot-starter-aspectj = { module = "org.springframework.boot:spring-boot-starter-aspectj" }
+spring-boot-starter-opentelemetry = { module = "org.springframework.boot:spring-boot-starter-opentelemetry" }
 micrometer-registry-prometheus = { module = "io.micrometer:micrometer-registry-prometheus" }

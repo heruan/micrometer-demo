@@ -6,14 +6,20 @@ import io.micrometer.core.instrument.Timer;
 import com.vaadin.flow.component.Html;
 import com.vaadin.flow.component.badge.Badge;
 import com.vaadin.flow.component.badge.BadgeVariant;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H2;
+import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.signals.local.ValueSignal;
 import com.vaadin.flow.theme.lumo.LumoUtility.Gap;
+import io.micrometer.observation.Observation;
+import io.micrometer.observation.ObservationRegistry;
 
 @Route("people")
 class PeopleView extends VerticalLayout {
@@ -24,17 +30,21 @@ class PeopleView extends VerticalLayout {
     private final ValueSignal<String> fetchStats = new ValueSignal<>(INITIAL_HTML);
     private final ValueSignal<String> countStats = new ValueSignal<>(INITIAL_HTML);
 
-    PeopleView(PersonService service, MeterRegistry registry) {
+    PeopleView(PersonService service, MeterRegistry registry, ObservationRegistry observations) {
         this.registry = registry;
 
         var slowToggle = new Checkbox("Simulate slow fetches");
         slowToggle.setValue(service.isSlow());
         slowToggle.addValueChangeListener(e -> service.setSlow(e.getValue()));
 
+        var breakBtn = new Button("Trigger error", e -> triggerError(service, observations));
+        breakBtn.addThemeVariants(ButtonVariant.LUMO_ERROR);
+
         var stats = new HorizontalLayout(
                 metric("fetch", fetchStats),
                 metric("count", countStats),
-                slowToggle);
+                slowToggle,
+                breakBtn);
         stats.setAlignItems(Alignment.CENTER);
 
         var grid = new Grid<>(Person.class, false);
@@ -57,6 +67,18 @@ class PeopleView extends VerticalLayout {
 
         setSizeFull();
         add(new H2("People"), stats, grid);
+    }
+
+    private void triggerError(PersonService service, ObservationRegistry observations) {
+        try {
+            Observation.createNotStarted("vaadin.click", observations)
+                    .contextualName("click trigger-error")
+                    .lowCardinalityKeyValue("component", "trigger-error")
+                    .observe(service::breakSomething);
+        } catch (RuntimeException ex) {
+            var n = Notification.show("Error: " + ex.getMessage(), 3000, Notification.Position.MIDDLE);
+            n.addThemeVariants(NotificationVariant.LUMO_ERROR);
+        }
     }
 
     private HorizontalLayout metric(String label, ValueSignal<String> signal) {

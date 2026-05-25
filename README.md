@@ -47,6 +47,11 @@ Grafana is available at http://localhost:3000 (anonymous Admin access enabled,
 no login required). The Prometheus data source is auto-provisioned from
 `grafana/provisioning/datasources/prometheus.yaml`.
 
+Jaeger is available at http://localhost:16686. The app exports OTLP traces to
+it on port 4318; every `@Observed` method becomes a span, and
+`TracingVaadinInitListener` emits a `vaadin.navigate` span per route change so
+you can correlate "what the user did" with downstream calls and errors.
+
 Useful queries in the **Graph** tab:
 
 - `jvm_memory_used_bytes`

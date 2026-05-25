@@ -46,6 +46,11 @@ class PersonService {
         return people.size();
     }
 
+    @Observed(name = "person.break", contextualName = "person-break")
+    void breakSomething() {
+        throw new IllegalStateException("simulated outage in person service");
+    }
+
     private void maybeHiccup() {
         if (!slow.get()) {
             return;
