@@ -1,0 +1,16 @@
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+  observations:
+    annotations:
+      enabled: true
+  metrics:
+    distribution:
+      percentiles-histogram:
+        person.fetch: true
+        person.count: true
+      slo:
+        person.fetch: 10ms, 50ms, 100ms, 500ms
+        person.count: 10ms, 50ms, 100ms, 500ms

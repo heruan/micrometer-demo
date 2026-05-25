@@ -1,0 +1,28 @@
+# Gradle
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# Vaadin
+node_modules/
+src/main/bundles/
+src/main/frontend/generated/
+vite.generated.ts
+package-lock.json
+pnpm-lock.yaml
+tsconfig.json
+types.d.ts
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log

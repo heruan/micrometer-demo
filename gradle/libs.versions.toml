@@ -1,0 +1,17 @@
+[versions]
+vaadin = "25.1.5"
+spring = "4.0.6"
+spotless = "8.5.1"
+
+[plugins]
+vaadin = { id = "com.vaadin", version.ref = "vaadin" }
+spring = { id = "org.springframework.boot", version.ref = "spring" }
+spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
+
+[libraries]
+vaadin-spring-boot-starter = { module = "com.vaadin:vaadin-spring-boot-starter", version.ref = "vaadin" }
+vaadin-dev = { module = "com.vaadin:vaadin-dev", version.ref = "vaadin" }
+spring-boot-bom = { module = "org.springframework.boot:spring-boot-dependencies", version.ref = "spring" }
+spring-boot-starter-actuator = { module = "org.springframework.boot:spring-boot-starter-actuator" }
+spring-boot-starter-aspectj = { module = "org.springframework.boot:spring-boot-starter-aspectj" }
+micrometer-registry-prometheus = { module = "io.micrometer:micrometer-registry-prometheus" }
